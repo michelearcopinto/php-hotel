@@ -56,9 +56,11 @@ if ($checked_parking_status === 'all_hotels' || $checked_parking_status === null
     });
 }
 
-var_dump($filtered_hotels);
-
-
+if ($selected_star_number !== 'Numero stelle' && $selected_star_number !== null) {
+    $filtered_hotels = array_filter($filtered_hotels, function ($hotel) use ($selected_star_number) {
+        return $hotel['vote'] == $selected_star_number;
+    });
+}
 ?>
 
 <!DOCTYPE html>
@@ -120,11 +122,11 @@ var_dump($filtered_hotels);
             <form action="index.php" method="POST" class="d-flex gap-2 align-items-center justify-content-center my-4">
                 <select name="star_select" class="form-select" aria-label="Default select example">
                     <option selected hidden>Numero stelle</option>
-                    <option value="1">1 stella</option>
-                    <option value="2">2 stelle</option>
-                    <option value="3">3 stelle</option>
-                    <option value="4">4 stelle</option>
-                    <option value="5">5 stelle</option>
+                    <option value="1" <?php if ($selected_star_number === '1') echo 'selected' ?>>1 stella</option>
+                    <option value="2" <?php if ($selected_star_number === '2') echo 'selected' ?>>2 stelle</option>
+                    <option value="3" <?php if ($selected_star_number === '3') echo 'selected' ?>>3 stelle</option>
+                    <option value="4" <?php if ($selected_star_number === '4') echo 'selected' ?>>4 stelle</option>
+                    <option value="5" <?php if ($selected_star_number === '5') echo 'selected' ?>>5 stelle</option>
                 </select>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="parking_status" id="all_hotels" value="all_hotels" <?php if ($checked_parking_status === 'all_hotels') echo 'checked' ?>>
@@ -133,14 +135,14 @@ var_dump($filtered_hotels);
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="parking_status" id="no_parking" value="no_parking" <?php if ($checked_parking_status === 'no_parking') echo 'checked' ?>>
-                    <label class="form-check-label" for="no_parking">
+                    <input class="form-check-input" type="radio" name="parking_status" id="yes_parking" value="yes_parking" <?php if ($checked_parking_status === 'yes_parking') echo 'checked' ?>>
+                    <label class="form-check-label" for="yes_parking">
                         Con parcheggio
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="parking_status" id="yes_parking" value="yes_parking" <?php if ($checked_parking_status === 'yes_parking') echo 'checked' ?>>
-                    <label class="form-check-label" for="yes_parking">
+                    <input class="form-check-input" type="radio" name="parking_status" id="no_parking" value="no_parking" <?php if ($checked_parking_status === 'no_parking') echo 'checked' ?>>
+                    <label class="form-check-label" for="no_parking">
                         Senza parcheggio
                     </label>
                 </div>
@@ -172,6 +174,10 @@ var_dump($filtered_hotels);
                                 <td>{$hotel['distance_to_center']} km</td>
                             </tr>";
                         }
+
+                        $message = (count($filtered_hotels) === 0) ? '<tr><td colspan="5" class="text-center text-uppercase"><h1>Non ci sono hotel da mostrare</h1></td></tr>' : '';
+
+                        echo $message;
                         ?>
                 </tbody>
             </table>
