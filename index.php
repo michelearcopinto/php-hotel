@@ -56,7 +56,12 @@ if ($checked_parking_status === 'all_hotels' || $checked_parking_status === null
     });
 }
 
-if ($selected_star_number !== 'Numero stelle' && $selected_star_number !== null) {
+
+if ($selected_star_number == '0') {
+    $filtered_hotels = array_filter($filtered_hotels, function () use ($filtered_hotels) {
+        return $filtered_hotels;
+    });
+} elseif ($selected_star_number !== 'Numero stelle' && $selected_star_number !== null) {
     $filtered_hotels = array_filter($filtered_hotels, function ($hotel) use ($selected_star_number) {
         return $hotel['vote'] == $selected_star_number;
     });
@@ -122,6 +127,7 @@ if ($selected_star_number !== 'Numero stelle' && $selected_star_number !== null)
             <form action="index.php" method="POST" class="d-flex gap-2 align-items-center justify-content-center my-4">
                 <select name="star_select" class="form-select" aria-label="Default select example">
                     <option selected hidden>Numero stelle</option>
+                    <option value="0" <?php if ($selected_star_number === '0') echo 'selected' ?>>1-5 stelle</option>
                     <option value="1" <?php if ($selected_star_number === '1') echo 'selected' ?>>1 stella</option>
                     <option value="2" <?php if ($selected_star_number === '2') echo 'selected' ?>>2 stelle</option>
                     <option value="3" <?php if ($selected_star_number === '3') echo 'selected' ?>>3 stelle</option>
@@ -164,13 +170,14 @@ if ($selected_star_number !== 'Numero stelle' && $selected_star_number !== null)
 
                         foreach ($filtered_hotels as $hotel) {
                             $parking_available = $hotel['parking'] ? 'Disponibile' : 'Non disponibile';
+                            $star_message = $hotel['vote'] == 1 ? 'stella' : 'stelle';
 
                             echo
                             "<tr class='text-center'>
                                 <th scope='row'>{$hotel['name']}</th>
                                 <td>{$hotel['description']}</td>
                                 <td>$parking_available</td>
-                                <td>{$hotel['vote']} stelle</td>
+                                <td>{$hotel['vote']} $star_message</td>
                                 <td>{$hotel['distance_to_center']} km</td>
                             </tr>";
                         }
