@@ -58,8 +58,6 @@ $hotels = [
 
                 <?php
                 $keys = array_keys($hotels[0]);
-
-                $parking_available = $hotel['parking'] ? 'Disponibile' : 'Non disponibile';
                 ?>
 
             <table class="table">
@@ -77,6 +75,8 @@ $hotels = [
                         <?php
 
                         foreach ($hotels as $hotel) {
+                            $parking_available = $hotel['parking'] ? 'Disponibile' : 'Non disponibile';
+
                             echo
                             "<tr class='text-center'>
                                 <th scope='row'>{$hotel['name']}</th>
