@@ -53,27 +53,42 @@ $hotels = [
 <body>
     <div class="card container mt-5">
         <div class="card-body">
-            <h1 class="card-title">Hotels</h1>
+            <h1 class="card-title text-center text-uppercase">hotels</h1>
             <p class="card-text">
-            <ul>
+
                 <?php
-                foreach ($hotels as $hotel) {
+                $keys = array_keys($hotels[0]);
 
-                    $parking_available = $hotel['parking'] ? 'Disponibile' : 'Non disponibile';
-
-                    echo "<li>
-                    <strong>Nome:</strong> {$hotel['name']}
-
-                    <ul class='mb-3'>
-                    <li><strong>Descrizione:</strong> {$hotel['description']};</li>
-                    <li><strong>Parcheggio:</strong> $parking_available</li>
-                    <li><strong>Voto:</strong> {$hotel['vote']} stelle;</li>
-                    <li><strong>Distanza dal centro:</strong> {$hotel['distance_to_center']} km;</li>
-                    </ul>
-                    </li>";
-                }
+                $parking_available = $hotel['parking'] ? 'Disponibile' : 'Non disponibile';
                 ?>
-            </ul>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <?php
+                        foreach ($keys as $key) {
+                            echo "<th class='text-center' scope='col'>" . ucfirst($key) . "</th>";
+                        }
+                        ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <?php
+
+                        foreach ($hotels as $hotel) {
+                            echo
+                            "<tr class='text-center'>
+                                <th scope='row'>{$hotel['name']}</th>
+                                <td>{$hotel['description']}</td>
+                                <td>$parking_available</td>
+                                <td>{$hotel['vote']} stelle</td>
+                                <td>{$hotel['distance_to_center']} km</td>
+                            </tr>";
+                        }
+                        ?>
+                </tbody>
+            </table>
             </p>
         </div>
     </div>
