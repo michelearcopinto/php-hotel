@@ -129,7 +129,7 @@ if ($selected_star_number !== 'Numero stelle' && $selected_star_number !== null)
                     <option value="5" <?php if ($selected_star_number === '5') echo 'selected' ?>>5 stelle</option>
                 </select>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="parking_status" id="all_hotels" value="all_hotels" <?php if ($checked_parking_status === 'all_hotels') echo 'checked' ?>>
+                    <input class="form-check-input" type="radio" name="parking_status" id="all_hotels" value="all_hotels" <?php if ($checked_parking_status === 'all_hotels' || $checked_parking_status === null) echo 'checked' ?>>
                     <label class="form-check-label" for="all_hotels">
                         Con e senza parcheggio
                     </label>
