@@ -38,8 +38,8 @@ $hotels = [
     ],
 ];
 
-$selected_star_number = $_POST['star_select'];
-$checked_parking_status = $_POST['parking_status'];
+$selected_star_number = $_GET['star_select'];
+$checked_parking_status = $_GET['parking_status'];
 $filtered_hotels = [];
 
 var_dump($selected_star_number, $checked_parking_status);
@@ -57,7 +57,7 @@ if ($checked_parking_status === 'all_hotels' || $checked_parking_status === null
 }
 
 
-if ($selected_star_number == '0') {
+if ($selected_star_number == 'all_stars') {
     $filtered_hotels = array_filter($filtered_hotels, function () use ($filtered_hotels) {
         return $filtered_hotels;
     });
@@ -124,10 +124,10 @@ if ($selected_star_number == '0') {
             </table>
             <hr class="my-5">
             <h2 class="card-title text-center text-uppercase">risultati</h2>
-            <form action="index.php" method="POST" class="d-flex gap-2 align-items-center justify-content-center my-4">
+            <form action="index.php" method="GET" class="d-flex gap-2 align-items-center justify-content-center my-4">
                 <select name="star_select" class="form-select" aria-label="Default select example">
                     <option selected hidden>Numero stelle</option>
-                    <option value="0" <?php if ($selected_star_number === '0') echo 'selected' ?>>1-5 stelle</option>
+                    <option value="all_stars" <?php if ($selected_star_number === 'all_stars') echo 'selected' ?>>1-5 stelle</option>
                     <option value="1" <?php if ($selected_star_number === '1') echo 'selected' ?>>1 stella</option>
                     <option value="2" <?php if ($selected_star_number === '2') echo 'selected' ?>>2 stelle</option>
                     <option value="3" <?php if ($selected_star_number === '3') echo 'selected' ?>>3 stelle</option>
