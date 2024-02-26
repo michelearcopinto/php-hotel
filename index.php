@@ -37,6 +37,28 @@ $hotels = [
         'distance_to_center' => 50
     ],
 ];
+
+$selected_star_number = $_POST['star_select'];
+$checked_parking_status = $_POST['parking_status'];
+$filtered_hotels = [];
+
+var_dump($selected_star_number, $checked_parking_status);
+
+if ($checked_parking_status === 'all_hotels' || $checked_parking_status === null) {
+    $filtered_hotels = $hotels;
+} elseif ($checked_parking_status === 'no_parking') {
+    $filtered_hotels = array_filter($hotels, function ($hotel) {
+        return $hotel['parking'] === false;
+    });
+} elseif ($checked_parking_status === 'yes_parking') {
+    $filtered_hotels = array_filter($hotels, function ($hotel) {
+        return $hotel['parking'] === true;
+    });
+}
+
+var_dump($filtered_hotels);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -48,18 +70,22 @@ $hotels = [
     <title>PHP Hotel</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        .form-select {
+            width: fit-content
+        }
+    </style>
 </head>
 
 <body>
     <div class="card container mt-5">
         <div class="card-body">
             <h1 class="card-title text-center text-uppercase">hotels</h1>
-            <p class="card-text">
 
-                <?php
-                $keys = array_keys($hotels[0]);
-                ?>
-
+            <?php
+            $keys = array_keys($hotels[0]);
+            ?>
             <table class="table">
                 <thead>
                     <tr>
@@ -89,7 +115,66 @@ $hotels = [
                         ?>
                 </tbody>
             </table>
-            </p>
+            <hr class="my-5">
+            <h2 class="card-title text-center text-uppercase">risultati</h2>
+            <form action="index.php" method="POST" class="d-flex gap-2 align-items-center justify-content-center my-4">
+                <select name="star_select" class="form-select" aria-label="Default select example">
+                    <option selected hidden>Numero stelle</option>
+                    <option value="1">1 stella</option>
+                    <option value="2">2 stelle</option>
+                    <option value="3">3 stelle</option>
+                    <option value="4">4 stelle</option>
+                    <option value="5">5 stelle</option>
+                </select>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="parking_status" id="all_hotels" value="all_hotels" <?php if ($checked_parking_status === 'all_hotels') echo 'checked' ?>>
+                    <label class="form-check-label" for="all_hotels">
+                        Con e senza parcheggio
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="parking_status" id="no_parking" value="no_parking" <?php if ($checked_parking_status === 'no_parking') echo 'checked' ?>>
+                    <label class="form-check-label" for="no_parking">
+                        Con parcheggio
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="parking_status" id="yes_parking" value="yes_parking" <?php if ($checked_parking_status === 'yes_parking') echo 'checked' ?>>
+                    <label class="form-check-label" for="yes_parking">
+                        Senza parcheggio
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Cerca</button>
+            </form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <?php
+                        foreach ($keys as $key) {
+                            echo "<th class='text-center' scope='col'>" . ucfirst($key) . "</th>";
+                        }
+                        ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <?php
+
+                        foreach ($filtered_hotels as $hotel) {
+                            $parking_available = $hotel['parking'] ? 'Disponibile' : 'Non disponibile';
+
+                            echo
+                            "<tr class='text-center'>
+                                <th scope='row'>{$hotel['name']}</th>
+                                <td>{$hotel['description']}</td>
+                                <td>$parking_available</td>
+                                <td>{$hotel['vote']} stelle</td>
+                                <td>{$hotel['distance_to_center']} km</td>
+                            </tr>";
+                        }
+                        ?>
+                </tbody>
+            </table>
         </div>
     </div>
 
